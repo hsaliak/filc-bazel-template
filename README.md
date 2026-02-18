@@ -44,7 +44,7 @@ cc_library(
 
 cc_binary(
     name = "my_app",
-    srcs = ["main.c"],
+    srcs = ["fail.c/success.c"],
     deps = [":my_lib"],
 )
 ```
@@ -67,5 +67,21 @@ The toolchain uses a wrapper script (`toolchain/bin/filcc_wrapper.sh`) that dyna
 To verify that a binary has been compiled with Fil-C (and thus includes its safety checks), use the provided script:
 
 ```bash
-./scripts/check_filc.sh bazel-bin/src/hello_world
+./scripts/check_filc.sh bazel-bin/src/success
+```
+
+## Examples
+
+- `src/fail.c`: Demonstrates a use-after-free bug that Fil-C detects and stops.
+- `src/success.c`: A standard safe C program.
+
+To run the success case:
+```bash
+bazel run //src:success
+./scripts/check_filc.sh bazel-bin/src/success
+```
+
+To run the failure case (will trigger a Fil-C panic):
+```bash
+bazel run //src:fail
 ```
