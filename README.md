@@ -85,3 +85,11 @@ To run the failure case (will trigger a Fil-C panic):
 ```bash
 bazel run //src:fail
 ```
+
+## Build Characteristics
+
+Fil-C binaries are **statically linked** by default. This ensures that the custom runtime and safety checks are bundled with the executable. You can verify this using the `file` command:
+
+```bash
+file bazel-bin/src/success
+```
