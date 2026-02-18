@@ -44,7 +44,7 @@ cc_library(
 
 cc_binary(
     name = "my_app",
-    srcs = ["fail.c/success.c"],
+    srcs = ["my_app.c"],
     deps = [":my_lib"],
 )
 ```
