@@ -1,0 +1,23 @@
+# Bazel
+bazel-*
+/bazel-bin
+/bazel-out
+/bazel-testlogs
+/bazel-filbaz
+
+# Databases
+slop.db
+slop.db-shm
+slop.db-wal
+
+# Logs and temporary files
+*.log
+*.txt
+*.pid
+*.swp
+.vi.swp
+
+# Build artifacts
+bazel-bin/
+bazel-out/
+bazel-testlogs/
