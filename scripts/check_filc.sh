@@ -11,7 +11,8 @@ if ! command -v nm &> /dev/null; then
   exit 1
 fi
 
-if nm "$1" 2>/dev/null | grep -q "__filc"; then
+# We look for 'filc_' symbols which indicate the Fil-C runtime is present.
+if nm "$1" 2>/dev/null | grep -q "filc_"; then
   echo "SUCCESS: $1 was compiled with Fil-C."
   exit 0
 else
