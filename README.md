@@ -1,6 +1,8 @@
 # Fil-C Bazel Template
 
 This repository is a template for bootstrapping new Bazel projects using the [Fil-C compiler](https://github.com/pizlonator/fil-c). Fil-C is a memory-safe C/C++ compiler that provides spatial and temporal safety.
+You need Bazel 8.5.1 (use Bazelisk)
+You may need ruby, patchelf and other tools the filc compiler might need. The first compile might take a long time. 
 
 ## Getting Started
 
