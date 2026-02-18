@@ -18,8 +18,10 @@ To create a new project using this template:
 
 2.  **Verify the setup**:
     ```bash
-    bazel build //src:hello
+    bazel build //src:success
+    bazel build //src:fail
     ```
+    Running these with `bazel run ..` is a quick verification that the binaries work. Fail will trigger a Fil-C specific trap.
 
 ## Creating New Targets
 
