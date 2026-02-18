@@ -31,22 +31,25 @@ Once built, you can run the binary as usual. Fil-C binaries are typically linked
 ./bazel-bin/src/hello
 ```
 
-### Adding Fil-C to Your Project
+### Integrating into an Existing Project
 
-1.  **Define the Fil-C Repository**: Add the following to your `MODULE.bazel` to use the Fil-C module extension:
+If you want to use this Fil-C toolchain in a different Bazel project, follow these steps:
+
+1.  **Copy the Toolchain Files**: Copy `toolchain/`, `filc_extension.bzl`, and `filc_repo.bzl` to your project's root.
+2.  **Update `MODULE.bazel`**: Add the following to your `MODULE.bazel` to define the Fil-C repository and register the toolchain:
 
     ```python
     filc_ext = use_extension("//:filc_extension.bzl", "filc_ext")
     use_repo(filc_ext, "filc")
-    ```
 
-2.  **Register the Toolchain**: In the same `MODULE.bazel` file, register the toolchain:
-
-    ```python
     register_toolchains("//toolchain:filc_toolchain")
     ```
 
-3.  **Build with Fil-C**: Use the flag or configure your `.bazelrc` to use the toolchain by default.
+3.  **Configure `.bazelrc`**: To make Fil-C the default toolchain without passing flags every time, add this to your `.bazelrc`:
+
+    ```text
+    build --extra_toolchains=//toolchain:filc_toolchain
+    ```
 
 ## Creating New Targets
 
