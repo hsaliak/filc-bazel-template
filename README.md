@@ -1,63 +1,30 @@
-# Fil-C Bazel Toolchain
+# Fil-C Bazel Template
 
-This project provides a Bazel integration for the [Fil-C compiler](https://github.com/pizlonator/fil-c). Fil-C is a memory-safe C/C++ compiler that provides spatial and temporal safety by using a custom runtime and pointer representation.
+This repository is a template for bootstrapping new Bazel projects using the [Fil-C compiler](https://github.com/pizlonator/fil-c). Fil-C is a memory-safe C/C++ compiler that provides spatial and temporal safety.
 
-## Features
+## Getting Started
 
-- **Hermetic Toolchain**: Wraps the Fil-C compiler (`filcc`) to work seamlessly within the Bazel sandbox.
-- **Automatic Setup**: Uses Bazel's repository rules to download and compile Fil-C from source.
-- **Bzlmod Support**: Compatible with Bazel's modern module system.
+To create a new project using this template:
 
-## Prerequisites
-
-- [Bazel](https://bazel.build/) (v6.0 or later recommended).
-- A host C/C++ compiler (GCC or Clang) and standard build tools (make, cmake, etc.) required to build Fil-C.
-
-## Usage
-
-### Building a Target
-
-To build a C target using the Fil-C toolchain,  just use it normally or specify the `--extra_toolchains` flag:
-
-```bash
-bazel build //src:hello
-```
-
-### Running the Binary
-
-Once built, you can run the binary as usual. Fil-C binaries are typically linked statically with the Fil-C runtime.
-
-```bash
-./bazel-bin/src/hello
-```
-
-### Integrating into an Existing Project
-
-If you want to use this Fil-C toolchain in a different Bazel project, follow these steps:
-
-1.  **Copy the Toolchain Files**: Copy `toolchain/`, `filc_extension.bzl`, and `filc_repo.bzl` to your project's root.
-2.  **Update `MODULE.bazel`**: Add the following to your `MODULE.bazel` to define the Fil-C repository and register the toolchain:
-
-    ```python
-    filc_ext = use_extension("//:filc_extension.bzl", "filc_ext")
-    use_repo(filc_ext, "filc")
-
-    register_toolchains("//toolchain:filc_toolchain")
+1.  **Create your repository**:
+    ```bash
+    gh repo create my-filc-project --template your-username/filc-bazel-toolchain --public
+    cd my-filc-project
     ```
+    *(Alternatively, clone this repository and remove the `.git` directory)*.
 
-3.  **Configure `.bazelrc`**: To make Fil-C the default toolchain without passing flags every time, add this to your `.bazelrc`:
-
-    ```text
-    build --extra_toolchains=//toolchain:filc_toolchain
+2.  **Verify the setup**:
+    ```bash
+    bazel build //src:hello
     ```
 
 ## Creating New Targets
 
-Because the Fil-C toolchain is registered as a C++ toolchain, you can use standard Bazel C++ rules. Any `cc_binary`, `cc_library`, or `cc_test` target will automatically be built using `filcc`.
+Since this template is pre-configured with the Fil-C toolchain, you can use standard Bazel C++ rules. Any `cc_binary`, `cc_library`, or `cc_test` target will automatically be built using `filcc`.
 
 ### Example Binary
 
-In your `BUILD.bazel` file:
+In a `BUILD.bazel` file:
 
 ```python
 cc_binary(
@@ -87,21 +54,10 @@ No special attributes are required. The `.bazelrc` in this repo ensures that `--
 ## Project Structure
 
 - `toolchain/`: Contains the Bazel CC toolchain definition.
-  - `bin/filcc_wrapper.sh`: The core wrapper that handles `filcc` invocation and path mapping in the sandbox.
-  - `BUILD.bazel`: Toolchain and toolchain type definitions.
-  - `cc_config.bzl`: Low-level toolchain configuration.
-- `src/`: A sample C project.
-- `filc_repo.bzl`: Repository rule for downloading and building Fil-C.
+- `src/`: A sample C project to get you started.
+- `MODULE.bazel`: Configures the Fil-C repository and registers the toolchain.
+- `.bazelrc`: Sets default flags to use the Fil-C toolchain.
 
 ## How it Works
 
-The `filcc_wrapper.sh` script dynamically locates the `filcc` binary and its associated `pizfix` resource directory within the Bazel sandbox. It handles the repository name mangling introduced by Bzlmod (e.g., mapping `external/filc` to `external/+filc_ext+filc`) and ensures all necessary include paths are passed to the compiler using relative paths, satisfying Bazel's hermeticity requirements.
-
-
-## Default Toolchain
-
-A `.bazelrc` file has been provided to make Fil-C the default toolchain for this workspace. You can now build simply with:
-
-```bash
-bazel build //src:hello
-```
+The toolchain uses a wrapper script (`toolchain/bin/filcc_wrapper.sh`) that dynamically locates the `filcc` binary within the Bazel sandbox. It handles path mapping and ensure all necessary include paths are passed to the compiler using relative paths, satisfying Bazel's hermeticity requirements.
