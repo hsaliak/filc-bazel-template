@@ -61,3 +61,11 @@ No special attributes are required. The `.bazelrc` in this repo ensures that `--
 ## How it Works
 
 The toolchain uses a wrapper script (`toolchain/bin/filcc_wrapper.sh`) that dynamically locates the `filcc` binary within the Bazel sandbox. It handles path mapping and ensure all necessary include paths are passed to the compiler using relative paths, satisfying Bazel's hermeticity requirements.
+
+## Verification
+
+To verify that a binary has been compiled with Fil-C (and thus includes its safety checks), use the provided script:
+
+```bash
+./scripts/check_filc.sh bazel-bin/src/hello_world
+```
