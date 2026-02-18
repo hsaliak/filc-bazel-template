@@ -1,0 +1,6 @@
+# Fil-C Bazel Configuration
+# Make the Fil-C toolchain the default for all C/C++ builds in this workspace.
+build --extra_toolchains=//toolchain:filc_toolchain
+
+# Optional: Enable more verbose logging if needed
+# build --subcommands

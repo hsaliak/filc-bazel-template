@@ -1,0 +1,5 @@
+package(default_visibility = ["//visibility:public"])
+filegroup(
+    name = "filcc_wrapper",
+    srcs = ["filcc_wrapper.sh"],
+)

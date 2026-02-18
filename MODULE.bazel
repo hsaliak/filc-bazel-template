@@ -1,0 +1,14 @@
+module(
+    name = "filc_harness",
+    version = "0.1",
+)
+
+bazel_dep(name = "platforms", version = "0.0.10")
+bazel_dep(name = "bazel_skylib", version = "1.7.1")
+
+# Register the toolchain
+register_toolchains("//toolchain:filc_toolchain")
+
+# Use our custom extension to build filc
+filc_ext = use_extension("//:filc_extension.bzl", "filc_ext")
+use_repo(filc_ext, "filc")
