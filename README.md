@@ -17,7 +17,7 @@ This project provides a Bazel integration for the [Fil-C compiler](https://githu
 
 ### Building a Target
 
-To build a C target using the Fil-C toolchain, use the `--extra_toolchains` flag:
+To build a C target using the Fil-C toolchain,  just use it normally or specify the `--extra_toolchains` flag:
 
 ```bash
 bazel build //src:hello
@@ -33,28 +33,53 @@ Once built, you can run the binary as usual. Fil-C binaries are typically linked
 
 ### Adding Fil-C to Your Project
 
-1.  **Define the Fil-C Repository**: Add the following to your `MODULE.bazel`:
+1.  **Define the Fil-C Repository**: Add the following to your `MODULE.bazel` to use the Fil-C module extension:
 
     ```python
-    filc_repo = use_repo_rule("//:filc_repo.bzl", "filc_repo")
-
-    filc_repo(
-        name = "filc",
-        urls = ["https://github.com/pizlonator/fil-c/archive/refs/heads/deluge.tar.gz"],
-        strip_prefix = "fil-c-deluge",
-        patch_cmds = [
-            # Add any necessary patches here
-        ],
-    )
+    filc_ext = use_extension("//:filc_extension.bzl", "filc_ext")
+    use_repo(filc_ext, "filc")
     ```
 
-2.  **Configure the Toolchain**: Ensure the `toolchain/` directory is present in your project, and register it in your `MODULE.bazel`:
+2.  **Register the Toolchain**: In the same `MODULE.bazel` file, register the toolchain:
 
     ```python
     register_toolchains("//toolchain:filc_toolchain")
     ```
 
 3.  **Build with Fil-C**: Use the flag or configure your `.bazelrc` to use the toolchain by default.
+
+## Creating New Targets
+
+Because the Fil-C toolchain is registered as a C++ toolchain, you can use standard Bazel C++ rules. Any `cc_binary`, `cc_library`, or `cc_test` target will automatically be built using `filcc`.
+
+### Example Binary
+
+In your `BUILD.bazel` file:
+
+```python
+cc_binary(
+    name = "my_app",
+    srcs = ["my_app.c"],
+)
+```
+
+### Example Library
+
+```python
+cc_library(
+    name = "my_lib",
+    srcs = ["my_lib.c"],
+    hdrs = ["my_lib.h"],
+)
+
+cc_binary(
+    name = "my_app",
+    srcs = ["main.c"],
+    deps = [":my_lib"],
+)
+```
+
+No special attributes are required. The `.bazelrc` in this repo ensures that `--extra_toolchains=//toolchain:filc_toolchain` is passed, making Fil-C the preferred toolchain.
 
 ## Project Structure
 
