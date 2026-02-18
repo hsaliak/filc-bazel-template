@@ -9,6 +9,7 @@ To create a new project using this template:
 1.  **Create your repository**:
     ```bash
     gh repo create my-filc-project --template hsaliak/filc-bazel-template --public # or --private for a private repo
+    gh repo clone my-filc-project
     cd my-filc-project
     ```
     *(Alternatively, clone this repository and remove the `.git` directory)*.
